@@ -1,0 +1,33 @@
+<?php
+/**
+ * @var \App\View\AppView $this
+ * @var \App\Model\Entity\Product $product
+ */
+?>
+<div class="row">
+    <aside class="column">
+        <div class="side-nav">
+            <h4 class="heading"><?= __('Actions') ?></h4>
+            <?= $this->Html->link(__('List Products'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+        </div>
+    </aside>
+    <div class="column-responsive column-80">
+        <div class="products form content">
+            <?= $this->Form->create($product) ?>
+            <fieldset>
+                <legend><?= __('Add Product') ?></legend>
+                <?php
+                    echo $this->Form->control('product_name');
+                    echo $this->Form->control('product_detail');
+                    echo $this->Form->control('upload_or_url_path');
+                    echo $this->Form->control('url_path');
+                    echo $this->Form->control('movie_path');
+                    echo $this->Form->control('product_view_flg');
+                    echo $this->Form->control('product_order');
+                ?>
+            </fieldset>
+            <?= $this->Form->button(__('Submit')) ?>
+            <?= $this->Form->end() ?>
+        </div>
+    </div>
+</div>

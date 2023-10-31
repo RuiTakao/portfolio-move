@@ -78,30 +78,46 @@ class Application extends BaseApplication
             // Catch any exceptions in the lower layers,
             // and make an error page/response
             ->add(new ErrorHandlerMiddleware(Configure::read('Error'), $this))
-
-            // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
-
-            // Add routing middleware.
-            // If you have a large number of routes connected, turning on routes
-            // caching in production could improve performance.
-            // See https://github.com/CakeDC/cakephp-cached-routing
             ->add(new RoutingMiddleware($this))
-
-            // Parse various types of encoded request bodies so that they are
-            // available as array through $request->getData()
-            // https://book.cakephp.org/4/en/controllers/middleware.html#body-parser-middleware
             ->add(new BodyParserMiddleware())
-
-            // Cross Site Request Forgery (CSRF) Protection Middleware
-            // https://book.cakephp.org/4/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
             ->add(new CsrfProtectionMiddleware([
                 'httponly' => true,
-            ]));
+            ]))
+            ->add(new AuthenticationMiddleware($this));
 
         return $middlewareQueue;
+    }
+
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationService
+    {
+        $authenticationService = new AuthenticationService([
+            'unauthenticatedRedirect' => Router::url('/admin/users/login'),
+            'queryParam' => 'redirect',
+        ]);
+
+        // identifiers を読み込み、email と password のフィールドを確認します
+        $authenticationService->loadIdentifier('Authentication.Password', [
+            'fields' => [
+                'username' => 'username',
+                'password' => 'password',
+            ]
+        ]);
+
+        //  authenticatorsをロードしたら, 最初にセッションが必要です
+        $authenticationService->loadAuthenticator('Authentication.Session');
+        // 入力した email と password をチェックする為のフォームデータを設定します
+        $authenticationService->loadAuthenticator('Authentication.Form', [
+            'fields' => [
+                'username' => 'username',
+                'password' => 'password',
+            ],
+            'loginUrl' => Router::url('/admin/users/login'),
+        ]);
+
+        return $authenticationService;
     }
 
     /**
