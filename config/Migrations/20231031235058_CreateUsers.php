@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Migrations\AbstractMigration;
 
-class CreateAdmins extends AbstractMigration
+class CreateUsers extends AbstractMigration
 {
     /**
      * Change Method.
@@ -14,7 +14,7 @@ class CreateAdmins extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('admins');
+        $table = $this->table('users');
         $table
             ->addColumn('username', 'string',[
                 'null' => false
