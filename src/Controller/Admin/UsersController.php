@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Controller\AppController;
+use App\Controller\Admin\AppController;
 
 /**
- * Admins Controller
+ * Users Controller
  *
- * @method \App\Model\Entity\Admin[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class AdminsController extends AppController
+class UsersController extends AppController
 {
     public function beforeFilter(\Cake\Event\EventInterface $event)
     {
